@@ -15,7 +15,7 @@
 
   input:invalid {
     border: 1px solid red;
-  } 
+  }
 
 </style>
 <div id="leadscont" class="">
@@ -263,7 +263,7 @@
 
                           <div class="panel panel-default">
                             <div class="panel-title">
-                              Healthcare Contact
+                              Primary Healthcare Contact
                             </div>
 
                             <div class="panel-body">
@@ -330,7 +330,7 @@
                                     <div class="form-group">
                                       <label class="col-sm-3 control-label form-label">Telephone</label>
                                       <div class="col-sm-9">
-                                        <input type="text" name="empphone" class="form-control">
+                                        <input type="text" name="empphone" class="form-control"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -367,26 +367,26 @@
                                       <label class="col-sm-3 control-label form-label">Context<span class="color10">*</span></label>
                                       <div class="col-sm-9">
                                         <div class="radio radio-primary">
-                                            <input type="radio" name="context" id="mshx" value="mshx" checked data-full="Medical-Surgical HX">
+                                            <input type="radio" id="mshx" value="mshx" checked name="context" data-val="mshx"/>
                                             <label for="mshx">
                                                 Medical-Surgical HX
                                             </label>
                                         </div>
                                         <div class="radio radio-success">
-                                            <input type="radio" name="context" id="fhx" value="fhx" data-full="Family HX">
+                                            <input type="radio" id="fhx" value="fhx" name="context" data-val="fhx"/>
                                             <label for="fhx">
                                                 Family HX
                                             </label>
                                         </div>
                                         <div class="radio radio-warning">
-                                            <input type="radio" name="context" id="sehx" value="sehx" data-full="Socio-Economic HX">
+                                            <input type="radio" id="sehx" value="sehx" name="context" data-val="sehx"/>
                                             <label for="sehx">
                                                 Socio-Economic HX
                                             </label>
                                         </div>
 
                                         <div class="radio radio-danger">
-                                            <input type="radio" name="context" id="rfhx" value="rfhx" data-full="Risk Factor">
+                                            <input type="radio" id="rfhx" value="rfhx" name="context" data-val="rfhx"/>
                                             <label for="rfhx">
                                                 Risk Factor
                                             </label>
@@ -409,7 +409,7 @@
                                     <div class="form-group">
                                       <label class="col-sm-3 control-label form-label">Observation<span class="color10">*</span></label>
                                       <div class="col-sm-12">
-                                        <textarea class="form-control" name="phenomenon" rows="5" id="obsphen" value=""></textarea>
+                                        <textarea class="form-control" name="phenomenon" rows="7" id="obsphen" value=""></textarea>
                                       </div>
                                     </div>
                                     <button class="btn btn-default oadd float-r">Record</button>

@@ -90,8 +90,8 @@ records.apicalls(app);
 
 io.sockets.on('connection', function(socket) {
     //session = socket.request.session
-    var conn = socket.request.connection.remoteAddress;
-    console.log(colors.magenta(conn + ' -- connects to socket.io'));
+    //var conn = socket.request.connection.remoteAddress;
+    //console.log(colors.magenta(conn + ' -- connects to socket.io'));
       // passing express to the module
     records.socketcalls(socket); // passing express to the module
 });

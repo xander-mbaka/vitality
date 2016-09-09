@@ -162,6 +162,7 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
           e.preventDefault();
           e.stopPropagation();
           var data = Backbone.Syphon.serialize($("#tab7")[0]);
+          data.context = $('#tab7 :radio[name="context"]:checked').data('val');
           if (data.phenomenonType!= '' && data.context != '' && data.applicableDate != '' && data.phenomenon != '') {
             this.trigger("addObservation", data);
             var hx = $('#hxlist');
@@ -172,6 +173,7 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
             $('#hxtotal').text(count);
             data.context = hxtypes[data.context]
             System.HXObservations[count - 1] = data;
+            $('#tab7 input').val('')
           } else {
             swal("Missing Info!", "Ensure all mandatory entries are filled", "info");                      
           }
@@ -236,13 +238,14 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
 
         events: {
           "click .oadd": "addObservation",
-          "click .nsave": "editRecord",
+          "click .nsave": "updateRecord",
           "click .rdelete": "deleteRecord"
         },
 
         onShow: function(){       
           $('.rdelete').css({'display':'block'})
           System.socket.emit('record:get', {id: this.recordId});
+          System.socket.emit('record:getHistory', {id: this.recordId});
           this.setup();
           this.socketListen();
         },
@@ -306,30 +309,47 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
             }, 300);
           });
 
-          System.socket.on('record:history', function(data) {
-            data.forEach(function (elem, index) {
-              var hxcolor = '';
-              if (elem.context == 'Medical-Surgical HX') hxcolor = 'color5'
-              if (elem.context == 'Family HX') hxcolor = 'color7'
-              if (elem.context == 'Socio-Economic HX') hxcolor = 'color9'
-              if (elem.context == 'Risk Factors') hxcolor = 'color10'
-              var hx = $('#hxlist');
-              var tpl = $('<li class="list-group-item"><div class="panel-heading" style="font-size:14px;text-transform:uppercase;padding-bottom: 0px; font-weight: 300">'+elem.phenomenonType+'<span style="font-weight:bold;font-size:8px;padding-left:10px;" class="'+hxcolors[elem.context]+'">[ '+elem.context+' ]</span></div>'+
-                          '<div class="panel-body"><span class="name" style="font-weight:bold;font-size:11px;">Date Applicable: '+elem.applicableDate+'</span><br>'+elem.phenomenon+'</div></li>');
-              tpl.appendTo(hx);
-              var count = hx.find('li').length;
-              $('#hxtotal').text(count);
-            })
+          var self = this;
+          var ct = 0;
+          System.socket.on('record:history', function(data) {  
+            ++ct;
+            if (ct == 1) {
+              if( Object.prototype.toString.call( data ) === '[object Array]' ) {
+                var count = 0;
+                data.forEach(function (elem) {
+                  ++count;
+                  var hxcolor = '';
+                  if (elem.context == 'Medical-Surgical HX') hxcolor = 'color5'
+                  if (elem.context == 'Family HX') hxcolor = 'color7'
+                  if (elem.context == 'Socio-Economic HX') hxcolor = 'color9'
+                  if (elem.context == 'Risk Factors') hxcolor = 'color10'
+                  var hx = $('#hxlist');
+                  var tpl = $('<li class="list-group-item"><div class="panel-heading" style="font-size:14px;text-transform:uppercase;padding-bottom: 0px; font-weight: 300">'+elem.phenomenonType+'<span style="font-weight:bold;font-size:8px;padding-left:10px;" class="'+hxcolor+'">[ '+elem.context+' ]</span></div>'+
+                              '<div class="panel-body"><span class="name" style="font-weight:bold;font-size:11px;">Date Applicable: '+elem.dateApplicable+'</span><br>'+elem.phenomenon+'</div></li>');
+                  tpl.appendTo(hx);
+                  var count = hx.find('li').length;
+                  $('#hxtotal').text(count);
+                  System.HXObservations[count - 1] = elem;
+                })
+              } else {
+                var hxcolor = '';
+                if (data.context == 'Medical-Surgical HX') hxcolor = 'color5'
+                if (data.context == 'Family HX') hxcolor = 'color7'
+                if (data.context == 'Socio-Economic HX') hxcolor = 'color9'
+                if (data.context == 'Risk Factors') hxcolor = 'color10'
+                var hx = $('#hxlist');
+                var tpl = $('<li class="list-group-item"><div class="panel-heading" style="font-size:14px;text-transform:uppercase;padding-bottom: 0px; font-weight: 300">'+data.phenomenonType+'<span style="font-weight:bold;font-size:8px;padding-left:10px;" class="'+hxcolor+'">[ '+data.context+' ]</span></div>'+
+                            '<div class="panel-body"><span class="name" style="font-weight:bold;font-size:11px;">Date Applicable: '+data.dateApplicable+'</span><br>'+data.phenomenon+'</div></li>');
+                tpl.appendTo(hx);
+                var count = hx.find('li').length;
+                $('#hxtotal').text(count);
+                System.HXObservations[count - 1] = data;
+              }
+            } else {
+
+            }   
             
-
-            //obj.setPersonalData('person.png')
-
-            setTimeout(function() {
-              $('#dob-picker').daterangepicker({ singleDatePicker: true, showDropdowns: true, format: 'DD/MM/YYYY' }, function(start, end, label) {});
-              $('#obsdate').daterangepicker({ showDropdowns: true, format: 'DD/MM/YYYY' }, function(start, end, label) {});
-              $('.selectpicker').selectpicker();
-              $('.selectpicker').selectpicker('refresh');
-            }, 300);
+            
           });
 
           
@@ -337,10 +357,13 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
 
         socketListen: function(){
           var self = this;
-          System.socket.on('record:created', function(data) {
-            swal("Success!", "The record has been created. Patient No: "+data.id, "success");
+          System.socket.on('record:updated', function(data) {
+            swal("Success!", "The record has been updated. Patient No: "+data.id, "success");
             $('.nsave').prop({disabled: false});
-            self.setup();
+          });
+
+          System.socket.on('observation:added', function(data) {
+            $('#tab7 input').val('');
           });
 
           System.socket.on('record:error', function(data) {
@@ -365,6 +388,7 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
           e.preventDefault();
           e.stopPropagation();
           var data = Backbone.Syphon.serialize($("#tab7")[0]);
+          data.context = $('#tab7 :radio[name="context"]:checked').data('val');
           if (data.phenomenonType!= '' && data.context != '' && data.applicableDate != '' && data.phenomenon != '') {
             this.trigger("update", data);
             var hx = $('#hxlist');
@@ -375,6 +399,9 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
             $('#hxtotal').text(count);
             data.context = hxtypes[data.context]
             System.HXObservations[count - 1] = data;
+            data.patientId = this.recordId;
+            console.log(data)
+            this.trigger("addHX", data);  
           } else {
             swal("Missing Info!", "Ensure all mandatory entries are filled", "info");                      
           }
@@ -394,12 +421,13 @@ define(["app", "tpl!apps/templates/register.tpl", "tpl!apps/templates/patient.tp
           var data6 = Backbone.Syphon.serialize($("#tab6")[0]);
           _.extend(data, data2, data3, data4, data5, data6);
 
-          data.balbf = parseFloat(data.balbf) || 0.00;
           data.history = System.HXObservations;
+
+          data.id = this.recordId;
 
           if (data.fname != '' && data.gname != '' && data.dob != '' && data.gender != '' && data.cellphone != '') {            
             if (data.cellphone.length > 7) {
-              this.trigger("create", data);  
+              this.trigger("updateRecord", data);  
             } else{
               swal("Invalid input!", "Ensure you enter correct phone number", "info");
             }      

@@ -33,6 +33,10 @@ var ObservationMapper = new Class(AbstractMapper, {
       this.dataMap.addColumnMap('recorded_stamp', 'recordedStamp', 'bigint');
       this.dataMap.addColumnMap('applicable_stamp', 'applicableStamp', 'bigint');
       this.mapLoaded = true;
+   },
+
+   findPatientHXStatement: function(patientId){
+      return 'SELECT * FROM '+this.dataMap.tableName+' WHERE (context = "Medical-Surgical HX" OR context = "Family HX" OR context = "Socio-Economic HX" OR context = "Risk Factors") AND party_id = '+ patientId;
    }
 
 });
@@ -96,6 +100,15 @@ var Observation = new Class(Action, {
             obj.setDepartment('Records');
             obj.serviceId = obj.eventId;
             cb(obj);
+         })
+      },
+
+      getHistory:function (patientId, cb) {
+         MapperRegistry.getMapper(this.newInstance(), function (mapper) {
+            //console.log(mapper.findPatientHXStatement(patientId));
+            mapper.findWhere(mapper.findPatientHXStatement(patientId), function (results) {
+               cb(results);
+            });
          })
       }
    },

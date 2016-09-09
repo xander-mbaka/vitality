@@ -1,5 +1,5 @@
-define(["app", "tpl!apps/templates/dash.tpl", "tpl!apps/templates/postmemo.tpl", "tpl!apps/templates/viewmemo.tpl", "money"], 
-	function(System, dashTpl, postMemoTpl, viewMemoTpl){
+define(["app", "tpl!apps/templates/dash.tpl", "tpl!apps/templates/postmemo.tpl", "tpl!apps/templates/consultation.tpl", "money"], 
+	function(System, dashTpl, postMemoTpl, testTpl){
   System.module('DashApp.Show.View', function(View, System, Backbone, Marionette, $, _){
     
     View.Dash = Marionette.ItemView.extend({      
@@ -295,7 +295,9 @@ define(["app", "tpl!apps/templates/dash.tpl", "tpl!apps/templates/postmemo.tpl",
 
     View.OfficeMemos = Marionette.ItemView.extend({      
 
-        template: viewMemoTpl,
+        //"tpl!apps/templates/viewmemo.tpl"
+        //template: viewMemoTpl,
+        template: testTpl,
 
         events: {
           "click .xcheck": "postMemo",
@@ -303,7 +305,7 @@ define(["app", "tpl!apps/templates/dash.tpl", "tpl!apps/templates/postmemo.tpl",
 
         onShow: function(){
           //$("#leadscont").unwrap();
-          this.setup();
+          //this.setup();
 
         },
 

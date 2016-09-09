@@ -102,14 +102,17 @@ var Patient = new Class(Party, {
 
       update:function (params, cb) {
          var self = this;
-         self.findOne(params.id, function (obj) {            
-            obj.setPersonalData('', params.fname, params.gname, params.sname, params.oname, params.dob, params.gender, '', params.nationality, params.identification, 'person.png')
+         self.findObject(params.id, function (obj) {            
+            obj.setPersonalData('', params.fname, params.gname, params.sname, params.oname, params.dob, params.gender, '', params.country, params.identification, 'person.png')
             obj.setContacts(params.cellphone, params.workphone, params.postal, params.physical, params.email)
             obj.setNextOfKinContact(params.kinname, params.kinrshp, params.kincellphone, params.kinotherphone, params.kinpostal, params.kinphysical)
             obj.setPrimaryHealthcareContact(params.healthname, params.healthoccupation, params.healthcellphone, params.healthotherphone, params.healthpostal, params.healthphysical)
             obj.setEmployerContact(params.empname, params.empphone, params.empaddress)
             obj.setDefaultBilling(params.insurer, params.refno)
+            obj.bloodType = params.btype;
+            console.log(params)
             obj.markDirty();
+            cb(obj);
             
             /*obj.setMedicalData(params.btype, params.history, function (pobj) {
                cb(pobj);

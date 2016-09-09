@@ -3,6 +3,13 @@ define(["marionette", "socketio", "sweetalert"], function(Marionette, io){
 
   window.momentum = System;
 
+  /*var coreURL = window.location.href.split(window.location.pathname);
+
+  System.coreRoot = coreURL[0];
+  
+  //Socket.IO issue with the URL
+  */
+
   System.coreRoot = "http://localhost:3000";
   //System.coreRoot = "http://192.168.1.171:3000";
   System.cache = {};

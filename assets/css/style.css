@@ -931,8 +931,8 @@ Page Header
 .page-header .right {
   position: absolute;
   right: 20px;
-  bottom: 20px;
-  min-width: 500px;
+  bottom: 10px;
+  min-width: 570px;
   text-align: right;
 }
 .page-header .right .btn-group {
@@ -1717,19 +1717,19 @@ Invoice
   margin: 0;
   color: #76747A;
   font-weight: bold;
-  font-size: 11px;
+  font-size: 9px;
 }
 .invoice .line h2 {
   color: #37353E;
   font-weight: normal;
-  font-size: 17px;
+  font-size: 13px;
   margin: 0;
 }
 .invoice .table {
   margin: 20px 15px 5px;
   width: 720px;
   color: #37353E;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .invoice .table.receipt {
@@ -1738,12 +1738,12 @@ Invoice
 }
 
 .invoice .table .title {
-  font-size: 11px;
+  font-size: 10px;
   color: #76747A;
 }
 .invoice .table p {
   font-family: 'Open Sans', sans-serif;
-  font-size: 11px;
+  font-size: 9px;
   color: #76747A;
 }
 .invoice .table .total {
@@ -3726,7 +3726,7 @@ table td {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  padding: 15px;
+  padding: 7px;
   line-height: 1.7;
 }
 .doc-grid {
@@ -3940,7 +3940,7 @@ Widgets
   padding-top: 40px;
   color: #fff;
   text-align: center;
-  background: url(../img/socialbg.jpg);
+  background: #3d464d;
   background-size: cover;
 }
 .profile-widget .profile-image {
@@ -4067,6 +4067,33 @@ Widgets
   display: block;
   color: #37363e;
   font-weight: 600;
+}
+
+.blog-post .patient {
+  position: relative;
+  padding-left: 100px;
+  padding-top: 00px;
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 1em;
+  line-height: 2.5em;
+}
+.blog-post .patient img {
+  width: 90px;
+  height: 90px;
+  border-radius: 999px;
+  position: absolute;
+  left: 0;
+}
+.blog-post .patient .text {
+  margin-bottom: 25px;
+}
+.blog-post .patient span {
+  display: block;
+  color: #37363e;
+  font-weight: 600;
+  font-size: 1.2em;
+  line-height: 3em;
 }
 /* Quick Menu */
 .quick-menu {

@@ -65,7 +65,11 @@ define(["app", "apps/records/show/show_view"], function(System, View){
         
         System.contentRegion.show(view);
 
-        view.on('update', function(data) {
+        view.on('addHX', function(data) {
+          System.socket.emit('observation:add', data);
+        });
+
+        view.on('updateRecord', function(data) {
           System.socket.emit('record:update', data);
         });
 

@@ -46,7 +46,7 @@ define(["app", "tpl!apps/templates/menu.tpl", "tpl!apps/templates/empty.tpl"],
               itpl.appendTo(idom);
             });
           });
-          $('#username').text(System.username);
+          //$('#username').text(System.username);
           var THAT = this;
           setTimeout(function() {
             THAT.activateMenu();

@@ -66,9 +66,14 @@ module.exports = function (UoW) {
             Patient.findObject(data.id, function (object) {
                 socket.emit('record:file', object);
             })
+        });
+
+        socket.on('record:getHistory', function (data) {
 
             Observation.getHistory(data.id, function (objects) {
                 socket.emit('record:history', objects);
+                console.log(objects.length+' - ')
+                console.log(new Date(Date.now()))
             })
         });
 
@@ -92,9 +97,11 @@ module.exports = function (UoW) {
             UoW.newCurrent();
             var UnitOfWork = UoW.getCurrent();
 
+            console.log(data)
+
             Patient.findObject(data.patientId, function (object) {
                 Observation.recordHistory(object, data.context, data.phenomenonType, data.phenomenon, data.applicableDate, function (obj) {
-                    obj.uiIndex = data.uiIndex;
+                    //obj.uiIndex = data.uiIndex;
                     UnitOfWork.commit(function (ack) {
                         if (ack) {
                             socket.emit('observation:added', obj);
